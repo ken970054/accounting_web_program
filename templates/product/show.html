@@ -1,0 +1,57 @@
+{% extends 'shared/layout.html' %}
+{% block body %}
+<!-- TODO: 顯示商品詳細資料 -->
+<img src="{{ product.img_url }}" width="100%" alt="">
+<div class="container py-5">
+    <h1>{{ product.title }}</h1>
+    <h3>
+        <span class="badge badge-warning">{{ product.category }}</span>
+        {% if product.on_sale %}
+        <span class="badge badge-success">商品熱賣中</span>
+        {% else %}
+        <span class="badge badge-secondary">商品已缺貨</span>
+        {% endif %}
+    </h3>
+    <h3>$ {{ product.price }}</h3>
+    <p>{{ product.description }}</p>
+    <a href="/" class="btn btn-primary">回到首頁</a>
+
+    <div class="card mt-4">
+        <div class="card-header">新增留言</div>
+        <form method="POST" class="card-body">
+            {{ create_comment_form.hidden_tag() }}
+            <div class="form-group">
+                {{ create_comment_form.email.label }}
+                {{ create_comment_form.email(class="form-control")}}
+            </div>
+            <div class="form-group">
+                {{ create_comment_form.content.label }}
+                {{ create_comment_form.content(class="form-control")}}
+            </div>
+            <div class="form-group">
+                {{ create_comment_form.submit(class="btn btn-primary")}}
+            </div>
+        </form>
+    </div>
+
+    {% for comment in comment_list %}
+    <div class="card mt-3">
+        <div class="card-header">{{ comment.email }}</div>
+        <div class="card-body">
+            <p>{{ comment.content }}</p>
+            <hr>
+            <form method="POST">
+                {{ comment.form.hidden_tag() }}
+                <div class="form-group">
+                    {{ comment.form.content.label }}
+                    {{ comment.form.content(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ comment.form.submit(class="btn btn-primary")}}
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

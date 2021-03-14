@@ -1,0 +1,35 @@
+{% extends 'shared/layout.html' %}
+{% block body %}
+<header class="jumbotron">
+    <div class="container">
+        <h1>首頁</h1>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <h2>產品列表</h2>
+        <div class="row">
+            {% for product in product_list %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img class="card-img-top" src="{{ product.img_url }}" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title mb-1">{{ product.title }}</h4>
+                        <p class="mb-1">
+                            <span class="badge badge-info">{{ product.category }}</span>
+                        </p>
+                        <p class="card-text">$ {{ product.price }}</p>
+                        <div>
+                            <a href="/product/{{ product.id }}/show" class="btn btn-primary">檢視詳細</a>
+                            {% if auth_state.is_admin %}
+                            <a href="/product/{{ product.id }}/edit" class="btn btn-warning">編輯</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
