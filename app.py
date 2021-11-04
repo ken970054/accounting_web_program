@@ -105,47 +105,50 @@ def index_page():
         user_info = auth.verify_session_cookie(session_cookie, check_revoked=True)
         user_email = user_info['email']
         user_email = user_email.split("@")[0]
+
+            # now use temp data to show on index.html
+        record_now = datetime.datetime.now()
+        year_now = record_now.year
+        month_now = record_now.month
+        day_now = record_now.day
+        record_date = str(year_now) + "." + str(month_now) + "." + str(day_now)
+        # To keep hour, minute, second in 2 digit form when changeing to string type
+        record_time = record_now.strftime("%H") + ":" + record_now.strftime("%M") + ":" + record_now.strftime("%S")
+
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        record_date_yesterday = str(yesterday.year) + "." + str(yesterday.month) + "." + str(yesterday.day)
+        #print(record_date)
+        #print(record_date_yesterday)
+
+        # get account and items of income/expense from database
+        Account = get_account_list(year_now, user_email)
+        incomeItem, expendItem = get_items_list(year_now, user_email)
+
+        # variables for transType
+        income_var = "Income"
+        expense_var = "Expense"
+        transfer_var = "Transfer"
+
+        if request.method == 'GET':
+            
+            # 取得當天與前一天的資料，藉由oneDayRecord function
+            income_today_list = oneDayRecord(year_now, month_now, record_date, income_var, user_email)
+            expense_today_list = oneDayRecord(year_now, month_now, record_date, expense_var, user_email)
+            transfer_today_list = oneDayRecord(year_now, month_now, record_date, transfer_var, user_email)
+            
+            income_yesterday_list = oneDayRecord(year_now, month_now, record_date_yesterday, income_var, user_email)
+            expense_yesterday_list = oneDayRecord(year_now, month_now, record_date_yesterday, expense_var, user_email)
+            transfer_yesterday_list = oneDayRecord(year_now, month_now, record_date_yesterday, transfer_var, user_email)
+
+            
+            return render_template('index.html', incomeItem=incomeItem, expendItem=expendItem, Account=Account, month_list=month_list, \
+                                    income_today_list=income_today_list, expense_today_list=expense_today_list, transfer_today_list=transfer_today_list, \
+                                    income_yesterday_list=income_yesterday_list, expense_yesterday_list=expense_yesterday_list, transfer_yesterday_list=transfer_yesterday_list )
     except:
         print("[User not login]")
+        return render_template('index.html')
 
-    # now use temp data to show on index.html
-    record_now = datetime.datetime.now()
-    year_now = record_now.year
-    month_now = record_now.month
-    day_now = record_now.day
-    record_date = str(year_now) + "." + str(month_now) + "." + str(day_now)
-    # To keep hour, minute, second in 2 digit form when changeing to string type
-    record_time = record_now.strftime("%H") + ":" + record_now.strftime("%M") + ":" + record_now.strftime("%S")
 
-    yesterday = datetime.date.today() - datetime.timedelta(days=1)
-    record_date_yesterday = str(yesterday.year) + "." + str(yesterday.month) + "." + str(yesterday.day)
-    #print(record_date)
-    #print(record_date_yesterday)
-
-    # get account and items of income/expense from database
-    Account = get_account_list(year_now, user_email)
-    incomeItem, expendItem = get_items_list(year_now, user_email)
-
-    # variables for transType
-    income_var = "Income"
-    expense_var = "Expense"
-    transfer_var = "Transfer"
-
-    if request.method == 'GET':
-        
-        # 取得當天與前一天的資料，藉由oneDayRecord function
-        income_today_list = oneDayRecord(year_now, month_now, record_date, income_var, user_email)
-        expense_today_list = oneDayRecord(year_now, month_now, record_date, expense_var, user_email)
-        transfer_today_list = oneDayRecord(year_now, month_now, record_date, transfer_var, user_email)
-        
-        income_yesterday_list = oneDayRecord(year_now, month_now, record_date_yesterday, income_var, user_email)
-        expense_yesterday_list = oneDayRecord(year_now, month_now, record_date_yesterday, expense_var, user_email)
-        transfer_yesterday_list = oneDayRecord(year_now, month_now, record_date_yesterday, transfer_var, user_email)
-
-        
-        return render_template('index.html', incomeItem=incomeItem, expendItem=expendItem, Account=Account, month_list=month_list, \
-                                income_today_list=income_today_list, expense_today_list=expense_today_list, transfer_today_list=transfer_today_list, \
-                                income_yesterday_list=income_yesterday_list, expense_yesterday_list=expense_yesterday_list, transfer_yesterday_list=transfer_yesterday_list )
     
     # 取得Add item的post data
     if request.method == "POST" and "transactionType" in request.get_json() and "editButton" not in request.get_json():
