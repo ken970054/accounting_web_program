@@ -1,0 +1,247 @@
+<!-- Modal for index.html edit -->
+<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="editDataForm" class="modal-content" method="POST" onsubmit="return disableEditButton(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title">Add Transaction</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="record1" class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="editTransType">Type</label>
+                        <p id="editTransType" style="color: gray"></p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="editMonth">Month</label>
+                        <select id="editMonth" class="form-control" required>
+                            {% for month in month_list %}
+                            <option value="{{month}}">{{month}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!--Income type-->
+                <div class="form-row" id="editIncomeTypeInput" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="editIncomeItem">Income Item</label>
+                        <select id="editIncomeItem" class="form-control" required>
+                            {% for item in incomeItem %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editInputMoney">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="editInputMoney" required> 
+                        <small id="editInputMoney_message" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editIncomeAccount">Income Account</label>
+                        <select id="editIncomeAccount" class="form-control" required>
+                            {% for account in Account %}
+                            <option value="{{account}}">{{account}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editIncomeNote">Note</label>
+                        <input type="text" class="form-control" id="editIncomeNote"> 
+                    </div>
+                </div>
+
+                <!--Expense type-->
+                <div class="form-row" id="editExpendTypeInput" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="editExpendItem">Expense Item</label>
+                        <select id="editExpendItem" class="form-control" required>
+                            {% for item in expendItem %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editCostMoney">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="editCostMoney" required> 
+                        <small id="editCostMoney_message" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editExpendAccount">Expense Account</label>
+                        <select id="editExpendAccount" class="form-control" required>
+                            {% for account in Account %}
+                            <option value="{{account}}">{{account}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editExpendNote">Note</label>
+                        <input type="text" class="form-control" id="editExpendNote"> 
+                    </div>
+                </div>
+
+                <!-- transger type-->
+                <div class="form-row" id="editTransTypeInput" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="editWithdrawAccount">Withdraw Account</label>
+                        <select id="editWithdrawAccount" class="form-control" required>
+                            {% for item in Account %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editTransAmount">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="editTransAmount" required> 
+                        <small id="editTransAmount_message" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editDepositAccount">Deposit Account</label>
+                        <select id="editDepositAccount" class="form-control" required>
+                            {% for item in Account %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editTransNote">Note</label>
+                        <input type="text" class="form-control" id="editTransNote"> 
+                    </div>
+                </div>
+                <!-- <button id="butAdd" type="submit" class="btn btn-primary">+Add</button> -->
+
+            </div>
+            <div class="modal-footer">
+                <button id="editSubmitRecord" type="submit" class="btn btn-primary"  disabled >Edit</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+<!-- Modal for account_book.html edit -->
+<div class="modal fade" id="editItemModal_book" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="editDataForm_book" class="modal-content" method="POST" onsubmit="return disableEditButton_book(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title">Add Transaction</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="record1" class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="editTransType">Type</label>
+                        <p id="editTransType_book" style="color: gray"></p>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="editMonth">Month</label>
+                        <select id="editMonth_book" class="form-control" required>
+                            {% for month in month_list %}
+                            <option value="{{month}}">{{month}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!--Income type-->
+                <div class="form-row" id="editIncomeTypeInput_book" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="editIncomeItem">Income Item</label>
+                        <select id="editIncomeItem_book" class="form-control" required>
+                            {% for item in incomeItem %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editInputMoney">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="editInputMoney_book" required> 
+                        <small id="editInputMoney_message_book" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editIncomeAccount">Income Account</label>
+                        <select id="editIncomeAccount_book" class="form-control" required>
+                            {% for account in Account %}
+                            <option value="{{account}}">{{account}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editIncomeNote">Note</label>
+                        <input type="text" class="form-control" id="editIncomeNote_book"> 
+                    </div>
+                </div>
+
+                <!--Expense type-->
+                <div class="form-row" id="editExpendTypeInput_book" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="editExpendItem">Expense Item</label>
+                        <select id="editExpendItem_book" class="form-control" required>
+                            {% for item in expendItem %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editCostMoney">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="editCostMoney_book" required> 
+                        <small id="editCostMoney_message_book" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editExpendAccount">Expense Account</label>
+                        <select id="editExpendAccount_book" class="form-control" required>
+                            {% for account in Account %}
+                            <option value="{{account}}">{{account}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editExpendNote">Note</label>
+                        <input type="text" class="form-control" id="editExpendNote_book"> 
+                    </div>
+                </div>
+
+                <!-- transger type-->
+                <div class="form-row" id="editTransTypeInput_book" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="editWithdrawAccount">Withdraw Account</label>
+                        <select id="editWithdrawAccount_book" class="form-control" required>
+                            {% for item in Account %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editTransAmount">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="editTransAmount_book" required> 
+                        <small id="editTransAmount_message_book" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editDepositAccount">Deposit Account</label>
+                        <select id="editDepositAccount_book" class="form-control" required>
+                            {% for item in Account %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editTransNote">Note</label>
+                        <input type="text" class="form-control" id="editTransNote_book"> 
+                    </div>
+                </div>
+                <!-- <button id="butAdd" type="submit" class="btn btn-primary">+Add</button> -->
+
+            </div>
+            <div class="modal-footer">
+                <button id="editSubmitRecord_book" type="submit" class="btn btn-primary"  disabled >Edit</button>
+            </div>
+        </form>
+    </div>
+
+</div>

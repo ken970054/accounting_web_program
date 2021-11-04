@@ -1,0 +1,315 @@
+{% extends 'shared/layout.html' %}
+{% block body %}
+
+<!--
+<header class="jumbotron index-header">
+    <div class="container">
+        <h1 style="text-align: center">Your Account Book</h1>
+        <h3 style="color:Gray; font-style: italic"></h3>
+    </div>
+</header>
+-->
+
+
+{% if auth_state.is_login %}
+<section style="padding: 3.5rem 0">
+    <div class="container">
+        <h1 style="text-align: center">Your Account Book</h1>
+        <h3 style="color:Gray; font-style: italic"> </h3>
+    </div> 
+    <div class="container">
+        
+        <!-- Used for calculateing the record number, and it won't show on screen-->
+        <input type="hidden" value="1" id="total_record">
+        
+        <form id="record_form" class="row needs-validation" onsubmit="return disableButton_book(this)" novalidate>
+            <div id="record_block" class="container"> 
+                <div class="form-row justify-content-center" id="recordGroup_1" style="border-width:3px; border-style:solid; border-color:#D3D3D3; margin:15px; padding: 15px">
+                
+                    <div class="form-group col-md-3 col-4">
+                        <label for="inputTransType_book">Type</label>
+                        <select id="inputTransType_book_1" class="form-control"  required>
+                        <option value="none" selected disabled>Choose...</option>
+                        <option value="Income">Income</option>
+                        <option value="Expense">Expense</option>
+                        <option value="Transfer">Transfer Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 col-4">
+                        <label for="inputMonth_book">Month</label>
+                        <select id="inputMonth_book_1" class="form-control" required>
+                            {% for month in month_list %}
+                            <option value="{{month}}">{{month}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!--Income type-->
+                    <div class="form-row" id="incomeTypeInput_book_1" style="display:none">
+                        <div class="form-group col-md-3 col-6">
+                            <label for="incomeItem_book">Income Item</label>
+                            <select id="incomeItem_book_1" class="form-control" required>
+                                {% for item in incomeItem %}
+                                <option value="{{item}}">{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="inputMoney_book">Amount of money</label>
+                            <input type="number" class="form-control" min="1" id="inputMoney_book_1" required> 
+                            <small id="inputMoney_message_book_1" class="form-text text-muted"></small>
+                            <div class="invalid-feedback">
+                                Please enter input money.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="incomeAccount_book">Income Account</label>
+                            <select id="incomeAccount_book_1" class="form-control" required>
+                                {% for account in Account %}
+                                <option value="{{account}}">{{account}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="incomeNote_book">Note</label>
+                            <input type="text" class="form-control" id="incomeNote_book_1"> 
+                        </div>
+                    </div>
+                    <!--Expense type-->
+                    <div class="form-row" id="expendTypeInput_book_1" style="display:none">
+                        <div class="form-group col-md-3 col-6">
+                            <label for="expendItem_book">Expense Item</label>
+                            <select id="expendItem_book_1" class="form-control" required>
+                                {% for item in expendItem %}
+                                <option value="{{item}}">{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="costMoney_book">Amount of money</label>
+                            <input type="number" class="form-control" min="1" id="costMoney_book_1" required> 
+                            <small id="costMoney_message_book_1" class="form-text text-muted"></small>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="expendAccount_book">Expense Account</label>
+                            <select id="expendAccount_book_1" class="form-control" required>
+                                {% for account in Account %}
+                                <option value="{{account}}">{{account}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="expendNote_book">Note</label>
+                            <input type="text" class="form-control" id="expendNote_book_1"> 
+                        </div>
+                    </div>
+
+                    <!-- transfer type-->
+                    <div class="form-row" id="transTypeInput_book_1" style="display:none">
+                        <div class="form-group col-md-3 col-6">
+                            <label for="withdrawAccount_book">Withdraw Account</label>
+                            <select id="withdrawAccount_book_1" class="form-control" required>
+                                {% for item in Account %}
+                                <option value="{{item}}">{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="transAmount_book">Amount of money</label>
+                            <input type="number" class="form-control" min="1" id="transAmount_book_1" required> 
+                            <small id="transAmount_message_book_1" class="form-text text-muted"></small>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="depositAccount_book">Deposit Account</label>
+                            <select id="depositAccount_book_1" class="form-control" required>
+                                {% for item in Account %}
+                                <option value="{{item}}">{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-6">
+                            <label for="transNote_book">Note</label>
+                            <input type="text" class="form-control" id="transNote_book_1"> 
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div style="text-align: right; margin-top: 15px;">
+                <button id="record_add" class="btn btn-warning">Add</button>
+                <button id="record_remove" class="btn btn-outline-danger">Remove</button>
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+                <button id="submitRecord_book" class="btn btn-primary" type="submit" disabled>Submit</button>
+            </div>
+        </form>
+    </div>
+    
+</section>
+
+
+<section>
+
+    <!--javascript function for select option and change the content of table-->
+    <script type="text/javascript">
+        function year_select_change(v)
+        {
+            var year = v;
+            let historyRecord_dict = {{ historyRecord_data | tojson }};
+            //console.log(year);
+            var node = document.getElementById('month_select');
+            //先把內容reset以免append會一直疊加
+            node.innerHTML = "<option value=''>--select month--</option>";
+            //把選取year所對應的month內容直接寫入month_select的option當中
+            if (year !== "Year") {
+                historyRecord_dict[year].forEach(function (month, index) {
+                    //console.log(Object.values(month));
+                    var month_name = Object.values(month);
+                    var month_number = Object.keys(month);
+                    var option_string = "<option value='" + month_number + "'>" + month_name + "</option>";
+                    node.innerHTML += option_string;  //append要加的內容
+                });
+            }
+        }
+
+        function month_select_change(v)
+        {
+            var month = v;
+            var year = document.getElementById("year_select").value;
+            const year_month = year + " " + month;
+
+            if (year !== "Year") {
+                //sent data to account_book through "get"
+                $.ajax({
+                    url: "/account/book",
+                    type: "get",
+                    //Can only pass string to Flask
+                    data: {selected_data: year_month},
+                    success: function(response) {
+                        //$("#")
+                        console.log('response Success');
+                        var result = $('<div />').append(response).find('#accountBook_table_div').html();
+                        $('#accountBook_table_div').html(result);
+                        console.log(result);
+                    },
+                    error: function(xhr) {
+                        console.log('[傳遞form失敗]', xhr);
+                    }
+                });
+            }
+
+        }
+    </script>
+    <!---------------------------------------------------------------------->
+
+    <div class="container table-responsive-lg" style="margin-top: 3em" id="accountBook_table_div">
+        <div style="display: flex">  <!--加上flex是為了讓h3, select可以顯示在同一行-->
+            <h3>{{ year_title }}-{{ month_title }} Account Record</h3> 
+
+            <!--先選取year的內容，就會觸發 year_select_change() --> 
+            <select id="year_select" class="form-control form-select" onchange="year_select_change(this.value)" style="width: 130px; margin-left: 20px; margin-right: 20px">
+                {% if historyRecord_data %}
+                    <option value="Year">--Year--</option>
+                    {% for key, value in historyRecord_data.items() %}
+                    <option value="{{key}}">{{key}}</option>
+                    {% endfor %}
+                {% endif %}
+            </select> 
+            
+            <select id="month_select" class="form-control form-select" onchange="month_select_change(this.value)" style="width: 200px; margin-left: 5px; margin-right: 20px">
+                <option value="">--select month--</option>
+            </select>
+
+            <div class="custom-control custom-switch" id="checkbox_id">
+                <input type="checkbox" class="custom-control-input" id="timeStampSwitch">
+                <label class="custom-control-label" for="timeStampSwitch" style="font-size: 16px;">Timestamp</label>
+            </div>
+        </div>
+
+        <div class="divScroll">
+            <table class="table table-bordered" id="accountBook_table">
+                <thead class="table-dark" >
+                    <tr>
+                        <th scope="col">Type</th>
+                        <th scope="col" style="text-align:right">Month</th>
+                        <th scope="col" style="text-align:right">Item</th>
+                        <th scope="col" style="text-align:right">Money</th>
+                        <th scope="col" style="text-align:right">Expense Account</th>
+                        <th scope="col" style="text-align:right">Income Account</th>
+                        <th scope="col" style="text-align:right">Note</th>
+                        <th scope="col" style="text-align:right; display:none">Timestamp</th>
+                        <th scope="col" style="text-align:right">Edit</th>
+                        <th scope="col" style="text-align:right">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Using for-loop to get data from latest ten record from database based on record-time -->
+                    {% for expense_month in expense_month_list %}
+                    <tr>
+                        <th scope="row">{{ expense_month.transType }}</th>
+                        <td align="right">{{ expense_month.month }}</td>
+                        <td align="right">{{ expense_month.expendItem }}</td>
+                        <td align="right">{{ expense_month.money | int | digitComma  }}</td>
+                        <td align="right">{{ expense_month.expendAccount}}</td>
+                        <td align="right"></td>
+                        <td align="right">{{ expense_month.expendNote }}</td>
+                        <td align="right" style="display:none">{{ expense_month.recordDate }} {{ expense_month.recordTime }}</td>
+                        <td>
+                            <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td style="display:none">{{ expense_month.recordCount }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% for income_month in income_month_list %}
+                    <tr>
+                        <th scope="row">{{ income_month.transType }}</th>
+                        <td align="right">{{ income_month.month }}</td>
+                        <td align="right">{{ income_month.incomeItem }}</td>
+                        <td align="right">{{ income_month.money | int | digitComma }}</td>
+                        <td align="right"></td>
+                        <td align="right">{{ income_month.incomeAccount }}</td>
+                        <td align="right">{{ income_month.incomeNote }}</td>
+                        <td align="right" style="display:none">{{ income_month.recordDate }} {{ income_month.recordTime }}</td>
+                        <td>
+                            <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td style="display:none">{{ income_month.recordCount }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% for transfer_month in transfer_month_list %}
+                    <tr>
+                        <th scope="row">{{ transfer_month.transType }}</th>
+                        <td align="right">{{ transfer_month.month }}</td>
+                        <td align="right"></td>
+                        <td align="right">{{ transfer_month.transAmount | int | digitComma }}</td>
+                        <td align="right">{{ transfer_month.withdrawAccount }}</td>
+                        <td align="right">{{ transfer_month.depositAccount }}</td>
+                        <td align="right">{{ transfer_month.transNote }}</td>
+                        <td align="right" style="display:none">{{ transfer_month.recordDate }} {{ transfer_month.recordTime }}</td>
+                        <td>
+                            <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td style="display:none">{{ transfer_month.recordCount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</section>
+{% endif %}
+{% endblock %}

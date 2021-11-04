@@ -1,0 +1,355 @@
+{% extends 'shared/layout.html' %}
+{% block body %}
+
+
+{% if auth_state.is_login %}
+<section style="padding: 3.5rem 0">
+
+    <!--javascript function for select option and change the content of table-->
+    <script type="text/javascript">
+        function manage_year_select_change(v)
+        {
+            var year = v;
+            
+            //iterate
+            if (year !== "Year") {
+                //sent data to account_manage through "get"
+                $.ajax({
+                    url: "/account/manage",
+                    type: "get",
+                    //Can only pass string to Flask
+                    data: {selected_data: year},
+                    success: function(response) {
+                        console.log('response Success');
+                        //console.log(response);
+                        var result = $('<div />').append(response).find('#accountManage_table_div').html();
+                        $('#accountManage_table_div').html(result);
+                        //console.log(result);
+                    },
+                    error: function(xhr) {
+                        console.log('[傳遞form失敗]', xhr);
+                    }
+                });
+            }
+        }
+
+        function accountManage_depositEdit(clicked_id) {
+            var account_name = document.getElementById(clicked_id).parentElement.parentElement.querySelector("th").innerHTML;
+            
+            let year = {{ year_title | tojson}};
+            let all_account_dict = {{ all_account_dict | tojson }};
+            document.getElementById("account_deposit_group").parentElement.querySelector(".card-header").innerHTML = "Edit your <span style='color:red'>" + account_name + "</span> original deposit";
+            document.getElementById("account_deposit_group").innerHTML = '<input type="number" class="form-control" min="1" id="depositMoney" onkeyup="accountManage_enableDepositSubmit()" required>\n<small id="depositMoney_message" class="form-text text-muted"></small>';
+            document.getElementById("account_deposit_group").innerHTML = "<p>Your deposit is: $" + all_account_dict[account_name]["Original deposit"] + "</p>" + document.getElementById("account_deposit_group").innerHTML + "<p id='checkYear' style='display:none'>" + year + "</p>";
+        }
+
+        function accountManage_enableDepositSubmit() {
+            var depositMoney = document.getElementById('depositMoney').value;
+            if (depositMoney === "") {
+                document.querySelector('#accountManage_depositModify').disabled = true;
+                document.getElementById("depositMoney_message").innerHTML = "Please enter original deposit.";
+            }
+            else {
+                document.querySelector('#accountManage_depositModify').disabled = false; 
+                document.getElementById("depositMoney_message").innerHTML = "";
+            }
+        }
+
+    </script>
+
+
+
+    <div class="container">
+        <h1 style="text-align: center">Account Manage</h1>
+        <h3 style="color:Gray; font-style: italic"> </h3>
+    </div> 
+
+    <div class="container table-responsive-lg" style="margin-top: 3em" id="accountManage_table_div">
+        <div style="display: flex">  <!--加上flex是為了讓h3, select可以顯示在同一行-->
+            <h3>{{ year_title }} Account Balance</h3>
+
+            <!--先選取year的內容，就會觸發 year_select_change() --> 
+            <select id="manage_year_select" class="form-control form-select" onchange="manage_year_select_change(this.value)" style="width: 130px; margin-left: 20px; margin-right: 20px">
+                {% if historyRecord_data %}
+                    <option value="Year">--Year--</option>
+                    {% for key, value in historyRecord_data.items() %}
+                    <option value="{{key}}">{{key}}</option>
+                    {% endfor %}
+                {% endif %}
+            </select> 
+        </div>
+
+        <div class="divScroll">
+            <!-- table for account balance record --> 
+            <table class="table table-bordered" id="accountManage_balance_table">
+                <thead class="table-dark" >
+                    <tr>
+                        <th scope="col">Account</th>
+                        <th scope="col" style="text-align:right">Balance</th>
+                        <th scope="col" style="text-align:right">Modify$</th>
+                        {% for month in month_list%}
+                        <th scope="col" style="text-align:right">{{ month }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Using for-loop to get data from all account details -->
+                    {% for account_name, details in all_account_dict.items() %}
+                    {% set button_id = "accountManage_editButton_" + loop.index|string %}
+                    <tr>
+                        <th scope="row">{{ account_name }}</th>
+                        <td align="right" style="background-color: #ff9900">{{ details["Account balance"] | digitComma }}</td>
+                        <td>
+                            <button type="button" class="btn editButton" id={{button_id}} onclick="accountManage_depositEdit(this.id)" data-toggle="modal" data-target="#AccountDepositEditModal"><i class="bi bi-pencil-square"></i></button>
+                        </td>
+                        {% if details["January"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["January"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["February"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["February"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["March"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["March"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["April"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["April"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["May"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["May"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["June"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["June"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["July"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["July"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["August"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["August"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["September"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["September"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["October"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["October"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["November"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["November"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["December"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["December"] | digitComma }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div style="display: flex; margin-top: 3em"> 
+            <h3>{{ year_title }} Gross Income</h3>
+        </div>
+        <div class="divScroll">
+            <!-- table for income record --> 
+            <table class="table table-bordered" id="accountManage_income_table">
+                <thead class="table-dark" >
+                    <tr>
+                        <th scope="col">Income item</th>
+                        <th scope="col" style="text-align:right">Total income</th>
+                        {% for month in month_list%}
+                        <th scope="col" style="text-align:right">{{ month }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Using for-loop to get data from all income details -->
+                    {% for income_name, details in all_income_dict.items() %}
+                    <tr>
+                        <th scope="row">{{ income_name }}</th>
+                        <td align="right" style="background-color: #009900">{{ details["Total income"] | digitComma }}</td>
+                        {% if details["January"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["January"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["February"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["February"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["March"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["March"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["April"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["April"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["May"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["May"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["June"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["June"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["July"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["July"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["August"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["August"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["September"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["September"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["October"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["October"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["November"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["November"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["December"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">{{ details["December"] | digitComma }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div style="display: flex; margin-top: 3em"> 
+            <h3>{{ year_title }} Expense Record</h3>
+        </div>
+        <div class="divScroll">
+            <!-- table for expense record --> 
+            <table class="table table-bordered" id="accountManage_expense_table">
+                <thead class="table-dark" >
+                    <tr>
+                        <th scope="col">Expense item</th>
+                        <th scope="col" style="text-align:right">Total expense</th>
+                        {% for month in month_list%}
+                        <th scope="col" style="text-align:right">{{ month }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Using for-loop to get data from all expense details -->
+                    {% for expense_name, details in all_expense_dict.items() %}
+                    <tr>
+                        <th scope="row">{{ expense_name }}</th>
+                        <td align="right" style="background-color: #cc0000">-{{ details["Total expense"] | digitComma }}</td>
+                        {% if details["January"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["January"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["February"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["February"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["March"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["March"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["April"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["April"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["May"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["May"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["June"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["June"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["July"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["July"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["August"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["August"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["September"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["September"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["October"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["October"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["November"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["November"] | digitComma }}</td>
+                        {% endif %}
+                        {% if details["December"] == 0 %}
+                        <td align="right"></td>
+                        {% else %}
+                        <td align="right">-{{ details["December"] | digitComma }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+        
+
+
+
+</section>
+{% endif %}
+{% endblock %}

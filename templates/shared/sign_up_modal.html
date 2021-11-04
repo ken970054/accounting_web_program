@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <form id="signUpForm" class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">註冊</h5>
+                <h5 class="modal-title">Sign Up</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,13 +14,47 @@
                     <input id="signUpEmail" type="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="">密碼</label>
+                    <label for="">Password</label>
                     <input id="signUpPassword" type="password" class="form-control" minlength="6" required>
+                    <small id="signup_password_message" class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    <label for="">Password (again)</label>
+                    <input id="confirmPassword" type="password" class="form-control" minlength="6" required>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">註冊</button>
+                <button id="submitSignUp" type="submit" class="btn btn-primary" disabled >Sign Up</button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    document.querySelector('#signUpPassword').onkeyup = function() {
+        var pw = document.querySelector('#signUpPassword').value;
+        if ( pw === '') {
+            document.querySelector('#submitSignUp').disabled = true;
+            document.getElementById("signup_password_message").innerHTML = "(Password length must be at least 6 characters and contain at least one letter)";
+        } else if (pw.length < 6 ) {
+            document.querySelector('#submitSignUp').disabled = true;
+            document.getElementById("signup_password_message").innerHTML = "(Password length must be at least 6 characters and contain at least one letter)";
+        } else {
+            document.querySelector('#submitSignUp').disabled = false;
+            document.getElementById("signup_password_message").innerHTML = "";
+        }
+    }
+    document.querySelector('#confirmPassword').onkeyup = function() {
+        var pw_c = document.querySelector('#confirmPassword').value;
+        if ( pw_c === '') {
+            document.querySelector('#submitSignUp').disabled = true;
+            /*document.getElementById("password_message").innerHTML = "(Password length must be at least 6 characters)";*/
+        } else if (pw_c.length < 6) {
+            document.querySelector('#submitSignUp').disabled = true;
+            /*document.getElementById("password_message").innerHTML = "(Password length must be at least 6 characters)";*/
+        } else {
+            document.querySelector('#submitSignUp').disabled = false;
+            /*document.getElementById("password_message").innerHTML = "";*/
+        }
+    }
+</script>

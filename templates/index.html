@@ -1,36 +1,235 @@
 {% extends 'shared/layout.html' %}
 {% block body %}
-<header class="jumbotron">
+<header class="jumbotron index-header" style="background-image: url(https://picsum.photos/id/486/1200/800);">
     <div class="container">
-        <h1>首頁</h1>
-        <h2>副標題</h2>
+        <h1>Keep your transaction record in order, now!</h1>
+        <h3 style="color:Gray; font-style: italic">- Good habits benefits all one's life</h3>
     </div>
 </header>
+
+{% if not auth_state.is_login %}
 <section>
-    <div class="container">
-        <h2>產品列表</h2>
-        <div class="row">
-            {% for product in product_list %}
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <img class="card-img-top" src="{{ product.img_url }}" alt="">
-                    <div class="card-body">
-                        <h4 class="card-title mb-1">{{ product.title }}</h4>
-                        <p class="mb-1">
-                            <span class="badge badge-info">{{ product.category }}</span>
-                        </p>
-                        <p class="card-text">$ {{ product.price }}</p>
-                        <div>
-                            <a href="/product/{{ product.id }}/show" class="btn btn-primary">檢視詳細</a>
-                            {% if auth_state.is_admin %}
-                            <a href="/product/{{ product.id }}/edit" class="btn btn-warning">編輯</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+    <div class="container" id="instruction">
+        <h2 class="text-center">Instructions</h2>
+        <details class="details-example">
+            <summary>Set up your financial depositor categories and your types of consumption</summary>
+            <ul>
+                <li>Go to <span style="background-color: CornSilk">Setting</span></li>
+                <li>Edit your own accounts </li>
+                <li>Edit your own income and expense items</li>
+            </ul>
+        </details>   
+        <details class="details-example">
+            <summary>Set up your original deposit in each account</summary>
+            <ul>
+                <li>Go to <span style="background-color: CornSilk">Account Management</span></li>
+                <li>Press the edit button in account balance table to change your amount of original deposit</li>
+                <li>You can also modify original deposit to correct your wrong accounting records</li>
+            </ul>
+        </details>   
+        <details class="details-example">
+            <summary>Two places to add your trade details</summary>
+            <ul>
+                <li><span style="background-color: CornSilk">Home</span> : press add new item button for adding one record</li>
+                <li><span style="background-color: CornSilk">Account Book</span> : you can add at most five records at one submit</li>
+                <li>You can also delete or edit the records you just submit</li>
+            </ul>
+        </details>
     </div>
 </section>
+{% endif %}
+
+{% if auth_state.is_login %}
+<section>
+    <center><a class="newItemButton" data-toggle="modal" data-target="#newItemModal" href="#">Add New Item</a></center>
+
+    <div class="container table-responsive-lg" style="margin-top: 3em">
+        <h3>Today's Record</h3>
+        <table class="table table-bordered" id="todayTable">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col" style="text-align:right">Month</th>
+                    <th scope="col" style="text-align:right">Item</th>
+                    <th scope="col" style="text-align:right">Money</th>
+                    <th scope="col" style="text-align:right">Expense Account</th>
+                    <th scope="col" style="text-align:right">Income Account</th>
+                    <th scope="col" style="text-align:right">Note</th>
+                    <th scope="col" style="text-align:right">Timestamp</th>
+                    <th scope="col" style="text-align:right">Edit</th>
+                    <th scope="col" style="text-align:right">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Using for-loop to get data from latest ten record from database based on record-time -->
+                {% for expense_today in expense_today_list %}
+                <tr>
+                    <th scope="row">{{ expense_today.transType }} {{ expense_today.recordCount}}</th>
+                    <td align="right">{{ expense_today.month }}</td>
+                    <td align="right">{{ expense_today.expendItem }}</td>
+                    <td align="right">{{ expense_today.money | int | digitComma }}</td>
+                    <td align="right">{{ expense_today.Account }}</td>
+                    <td align="right"></td>
+                    <td align="right">{{ expense_today.expendNote }}</td>
+                    <td align="right">{{ expense_today.recordDate }} {{ expense_today.recordTime }}</td>
+                    <td>
+                        <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+                {% for income_today in income_today_list %}
+                <tr>
+                    <th scope="row">{{ income_today.transType }} {{ income_today.recordCount}}</th>
+                    <td align="right">{{ income_today.month }}</td>
+                    <td align="right">{{ income_today.incomeItem }}</td>
+                    <td align="right">{{ income_today.money | int | digitComma }}</td>
+                    <td align="right"></td>
+                    <td align="right">{{ income_today.incomeAccount }}</td>
+                    <td align="right">{{ income_today.incomeNote }}</td>
+                    <td align="right">{{ income_today.recordDate }} {{ income_today.recordTime }}</td>
+                    <td>
+                        <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                {% for transfer_today in transfer_today_list %}
+                <tr>
+                    <th scope="row">{{ transfer_today.transType }} {{ transfer_today.recordCount}}</th>
+                    <td align="right">{{ transfer_today.month }}</td>
+                    <td align="right"></td>
+                    <td align="right">{{ transfer_today.transAmount | int | digitComma }}</td>
+                    <td align="right">{{ transfer_today.withdrawAccount }}</td>
+                    <td align="right">{{ transfer_today.depositAccount }}</td>
+                    <td align="right">{{ transfer_today.transNote }}</td>
+                    <td align="right">{{ transfer_today.recordDate }} {{ transfer_today.recordTime }}</td>
+                    <td>
+                        <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <br>
+        <h3>Yesterday's Record</h3>
+        <table class="table table-bordered" id="yesterdayTable">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col" style="text-align:right">Month</th>
+                    <th scope="col" style="text-align:right">Item</th>
+                    <th scope="col" style="text-align:right">Money</th>
+                    <th scope="col" style="text-align:right">Expense Account</th>
+                    <th scope="col" style="text-align:right">Income Account</th>
+                    <th scope="col" style="text-align:right">Note</th>
+                    <th scope="col" style="text-align:right">Timestamp</th>
+                    <th scope="col" style="text-align:right">Edit</th>
+                    <th scope="col" style="text-align:right">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Using for-loop to get data from latest ten record from database based on record-time -->
+                {% for expense_yesterday in expense_yesterday_list %}
+                <tr>
+                    <th scope="row">{{ expense_yesterday.transType }} {{ expense_yesterday.recordCount }}</th>
+                    <td align="right">{{ expense_yesterday.month }}</td>
+                    <td align="right">{{ expense_yesterday.expendItem }}</td>
+                    <td align="right">{{ expense_yesterday.money | int | digitComma }}</td>
+                    <td align="right">{{ expense_yesterday.expendAccount }}</td>
+                    <td align="right"></td>
+                    <td align="right">{{ expense_yesterday.expendNote }}</td>
+                    <td align="right">{{ expense_yesterday.recordDate }} {{ expense_yesterday.recordTime }}</td>
+                    <td>
+                        <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+                {% for income_yesterday in income_yesterday_list %}
+                <tr>
+                    <th scope="row">{{ income_yesterday.transType }} {{ income_yesterday.recordCount }}</th>
+                    <td align="right">{{ income_yesterday.month }}</td>
+                    <td align="right">{{ income_yesterday.incomeItem }}</td>
+                    <td align="right">{{ income_yesterday.money | int | digitComma }}</td>
+                    <td align="right"></td>
+                    <td align="right">{{ income_yesterday.incomeAccount }}</td>
+                    <td align="right">{{ income_yesterday.incomeNote }}</td>
+                    <td align="right">{{ income_yesterday.recordDate }} {{ income_yesterday.recordTime }}</td>
+                    <td>
+                        <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                {% for transfer_yesterday in transfer_yesterday_list %}
+                <tr>
+                    <th scope="row">{{ transfer_yesterday.transType }} {{ transfer_yesterday.recordCount }}</th>
+                    <td align="right">{{ transfer_yesterday.month }}</td>
+                    <td align="right"></td>
+                    <td align="right">{{ transfer_yesterday.transAmount | int | digitComma }}</td>
+                    <td align="right">{{ transfer_yesterday.withdrawAccount }}</td>
+                    <td align="right">{{ transfer_yesterday.depositAccount }}</td>
+                    <td align="right">{{ transfer_yesterday.transNote }}</td>
+                    <td align="right">{{ transfer_yesterday.recordDate }} {{ transfer_yesterday.recordTime }}</td>
+                    <td>
+                        <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+<section>
+    <div class="container" id="instruction">
+        <h2 class="text-center">Instructions</h2>
+        <details class="details-example">
+            <summary>Set up your financial depositor categories and your types of consumption</summary>
+            <ul>
+                <li>Go to <span style="background-color: CornSilk">Setting</span></li>
+                <li>Edit your own accounts </li>
+                <li>Edit your own income and expense items</li>
+            </ul>
+        </details>   
+        <details class="details-example">
+            <summary>Set up your original deposit in each account</summary>
+            <ul>
+                <li>Go to <span style="background-color: CornSilk">Account Management</span></li>
+                <li>Press the edit button in account balance table to change your amount of original deposit</li>
+                <li>You can also modify original deposit to correct your wrong accounting records</li>
+            </ul>
+        </details>   
+        <details class="details-example">
+            <summary>Two places to add your trade details</summary>
+            <ul>
+                <li><span style="background-color: CornSilk">Home</span> : press add new item button for adding one record</li>
+                <li><span style="background-color: CornSilk">Account Book</span> : you can add at most five records at one submit</li>
+                <li>You can also delete or edit the records you just submit</li>
+            </ul>
+        </details>
+    </div>
+</section>
+{% endif %}
 {% endblock %}

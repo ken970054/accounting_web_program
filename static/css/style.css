@@ -1,0 +1,331 @@
+/* global setting */
+/* customer property */
+:root {
+	--clr-primary-200: #F3EED9;
+	--clr-primary-400: #824936;
+
+	--clr-netural-100: #FFF;
+	--clr-nerural-900: #222C2A;
+	
+	--ff-primary: 'Roboto', sans-serif;
+	--ff-accent: 'Playfair Display', serif;
+}
+
+/* broader box sizing */
+*,.
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: var(--ff-primary);
+	font-weight: 400;
+	font-size: 1.0rem;
+	line-height: 1.6;
+}
+
+@media (min-width: 40em) {
+	body {
+       font-size: 1.3125rem;
+    }
+}
+
+body,
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+}
+
+h1,
+h2,
+h3 {
+	/*color: var(--clr-primary-400)*/
+	font-family: var(--ff-accent);
+	font-weight: 900;
+	line-height: 1;
+}
+
+
+/* change head line size by screen size*/
+h1 {
+    font-size: 1.5em;
+}
+h2{
+    font-size: 1.3em;
+}
+h3 {
+    font-size: 1em;
+}
+
+@media (min-width: 40em) {
+	h1 {
+       font-size: 2em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+    h3 {
+        font-size: 1.3em;
+    }
+}
+
+
+h2,
+h3,
+p {
+	margin-bottom: 1em;
+}
+
+small {
+    color: red;
+}
+
+table {
+    font-size: 60%;
+}
+
+@media (min-width: 40em) {
+    table {
+        font-size: 70%;
+    }
+}
+
+details {
+    font-size: 60%;
+}
+
+@media (min-width: 40em) {
+    details {
+        font-size: 100%;
+    }
+}
+
+
+/* important img setting, make sure the image can always fit in the screen*/
+img {
+	display: block;
+	max-width: 100%;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-left {
+	text-align: left;
+}
+
+header,
+section {
+	padding: 3rem 0;	
+}
+
+
+/* month table scroll bar setting*/
+.divScroll {
+    overflow-x:scroll;
+    height:700px;
+}
+
+
+
+
+.divScroll thead th {
+    position: sticky;
+    top: 0; 
+    z-index: 1;
+}
+
+/* form setting*/
+.form-group {
+    margin-bottom: 1rem;
+}
+  
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+  
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+/* button setting */
+#editExpenseButton, #editIncomeButton, #editAccountButton {
+    background-color: #ddd;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+}
+
+
+@media (min-width: 40em) {
+	header,
+	section {
+		padding: 5rem 0;
+	}
+}
+
+.container {
+	margin-inline: auto;
+	width: min(90%, 70.5em);
+}
+
+.split {
+	/* make div become two column*/
+	display: flex;
+	/* when in small screen, the text can be in the same column*/
+	flex-direction: column;
+}
+
+@media (min-width: 40em) {
+	.split {
+		flex-direction: row;
+	}
+	
+	/* all the direct children of my split will have flex-basis */
+	.split > * {
+		flex-basis: 100%;
+	}
+	
+	.split > * + * {
+		margin-left: 4em;
+	}
+}
+
+.container--narrow {
+	max-width: 34rem;
+}
+
+
+.bg-light { 
+	background-color: var(--clr-primary-200);
+}
+.bg-primary { 
+	color: var(--clr-netural-100);
+	background-color: var(--clr-netural-900);
+}
+.bg-dark { 
+	color: var(--clr-netural-100);
+	background-color: var(--clr-netural-200);
+}
+
+.bg-primary h2,
+.bg-dark h2 {
+	color: var(--clr-nprimary-200);
+}
+
+
+/*-----------------------------------------------------------------------*/
+
+/* For index.html*/
+
+/* index header*/
+.index-header {
+    border-radius: 0px;
+    padding: 50px 0;
+    background-size: cover;
+    background-position: center top;
+}
+.jumbotron {
+    height: 500px; 
+    display: block; 
+    max-width: 100%;
+}
+
+/* index instruction details*/
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+
+/* index new item buttom */
+.newItemButton {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 24px;
+    border: 1px solid #275798;
+    border-radius: 8px;
+    background: #4aa3ff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#4aa3ff), to(#275798));
+    background: -moz-linear-gradient(top, #4aa3ff, #275798);
+    background: linear-gradient(to bottom, #4aa3ff, #275798);
+    text-shadow: #17335a 1px 1px 1px;
+    font: normal normal bold 28px arial;
+    color: #ffffff;
+    text-decoration: none;
+}
+.newItemButton:hover,
+.newItemButton:focus {
+    border: 1px solid #2e66b3;
+    background: #59c4ff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#59c4ff), to(#2f68b6));
+    background: -moz-linear-gradient(top, #59c4ff, #2f68b6);
+    background: linear-gradient(to bottom, #59c4ff, #2f68b6);
+    color: #ffffff;
+    text-decoration: none;
+}
+.newItemButton:active {
+    background: #275798;
+    background: -webkit-gradient(linear, left top, left bottom, from(#275798), to(#275798));
+    background: -moz-linear-gradient(top, #275798, #275798);
+    background: linear-gradient(to bottom, #275798, #275798);
+}
+.newItemButton:before{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 4px -6px -4px;
+    position: relative;
+    top: 0px;
+    left: -4px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACKklEQVRIia3VT4jNURQH8M/7mTRpek3SLIRmNU2SpkmTNA0RJmRhIfk3KFlIxoaVlYVkZWFloYhZTbKxEUWMpJcm/0LZ2MiCUJOmMVnc88zteeaPeadOnXvvOed77vd3fucuQIHSLHUrbuMdhvENr2eIUUhS1NF8fxse4yC+oh/3sPcf/lCUYtGJw1iaHeZSYBmO4wpO4RHKuIUvmKgTBzbgSVTYHboKPQE8iErsP8M6LMQFdATIA5zDmojpiRyvxLWvYwsuhvbF9Y8EeDeeojeS38ClAO7MQN5iRcT2xbkX2ImmGv76A7wrKu8NnyGcDr+uSNKB1ki8J6O1Aj/QVkNbf1Z5TkuevCo5SDkD+QPwC3fDcUncZjQqfh7rtkh+IXxqdWPw3YX2oHM/RkuR7Cz2YXHQAJNhj8d6YWbXk2rchCmq15Skb/BF6oJyOL2UuuoadscaVuMmDuGO1CnT+Q9VK9wciGvjYAyfo5rP+B77n7K9sShsOv8J4kNkUjTQrjT5Wyb/w26W6FtUk6slB6g3ImYjK3FV4n1coqsqrcyPokJq8Y1Sa1ak9qyeVepVPReKmiVaVkhDbzuO5j7zpehnJPqAkwEwnOfKAapVFXO0z+Ay7pv6wQbjrK0RXTSCTdLYr+2iCXiTVdVorRRSa5WjqmpljbItwAnswkdpGnZKE/aA9IAMSN2yHDvwHsekMbF+Bv+BJjyMoBHpqaOBs6iEFpyXHpVGS/tvo9yxxipg1roAAAAASUVORK5CYII=") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
+
+/* operation button */
+.deleteButton,
+.editButton {
+    background-color: DarkGray;
+    border: none;
+    color: white;
+    padding: 12px 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.deleteButton:hover,
+.editButton:hover {
+    background-color: LightGray;
+}

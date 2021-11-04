@@ -1,0 +1,204 @@
+<!-- Modal -->
+<div class="modal fade" id="newItemModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="incomeCostAdding" class="modal-content" method="POST" onsubmit="return disableButton(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title">Add Transaction</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="record1" class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="inputTransType">Type</label>
+                        <select id="inputTransType" class="form-control" onchange="show_transType(this.value)" required>
+                          <option value="none" selected disabled>Choose...</option>
+                          <option value="Income">Income</option>
+                          <option value="Expense">Expense</option>
+                          <option value="Transfer">Transfer Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputMonth">Month</label>
+                        <select id="inputMonth" class="form-control" required>
+                            {% for month in month_list %}
+                            <option value="{{month}}">{{month}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!--Income type-->
+                <div class="form-row" id="incomeTypeInput" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="incomeItem">Income Item</label>
+                        <select id="incomeItem" class="form-control" required>
+                            {% for item in incomeItem %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputMoney">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="inputMoney" required> 
+                        <small id="inputMoney_message" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="incomeAccount">Income Account</label>
+                        <select id="incomeAccount" class="form-control" required>
+                            {% for account in Account %}
+                            <option value="{{account}}">{{account}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="incomeNote">Note</label>
+                        <input type="text" class="form-control" id="incomeNote"> 
+                    </div>
+                </div>
+
+                <!--Expense type-->
+                <div class="form-row" id="expendTypeInput" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="expendItem">Expense Item</label>
+                        <select id="expendItem" class="form-control" required>
+                            {% for item in expendItem %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="costMoney">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="costMoney" required> 
+                        <small id="costMoney_message" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="expendAccount">Expense Account</label>
+                        <select id="expendAccount" class="form-control" required>
+                            {% for account in Account %}
+                            <option value="{{account}}">{{account}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="expendNote">Note</label>
+                        <input type="text" class="form-control" id="expendNote"> 
+                    </div>
+                </div>
+
+                <!-- transfer type-->
+                <div class="form-row" id="transTypeInput" style="display:none">
+                    <div class="form-group col-md-6">
+                        <label for="withdrawAccount">Withdraw Account</label>
+                        <select id="withdrawAccount" class="form-control" required>
+                            {% for item in Account %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="transAmount">Amount of money</label>
+                        <input type="number" class="form-control" min="1" id="transAmount" required> 
+                        <small id="transAmount_message" class="form-text text-muted"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="depositAccount">Deposit Account</label>
+                        <select id="depositAccount" class="form-control" required>
+                            {% for item in Account %}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="transNote">Note</label>
+                        <input type="text" class="form-control" id="transNote"> 
+                    </div>
+                </div>
+                <!-- <button id="butAdd" type="submit" class="btn btn-primary">+Add</button> -->
+
+            </div>
+            <div class="modal-footer">
+                <button id="submitRecord" type="submit" class="btn btn-primary" disabled >Submit</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    // showing the form of selecting trans type
+    function show_transType(v)
+    {
+        var transType = v;
+        var income_input = document.getElementById("incomeTypeInput");
+        var expend_input = document.getElementById("expendTypeInput");
+        var trans_input = document.getElementById("transTypeInput");
+        
+
+        if (transType === "Income"){
+            income_input.style.display = 'flex';
+            expend_input.style.display = 'none';
+            trans_input.style.display = 'none';
+
+            document.querySelector('#inputMoney').onkeyup = function() {
+                var inputMoney = document.querySelector('#inputMoney').value;
+                if (inputMoney === "") {
+                    document.querySelector('#submitRecord').disabled = true;
+                    document.getElementById("inputMoney_message").innerHTML = "Please enter input money.";
+                }
+                else {
+                    document.querySelector('#submitRecord').disabled = false; 
+                    document.getElementById("inputMoney_message").innerHTML = "";
+                }
+            }
+            
+        }
+        else if (transType === "Expense"){
+            income_input.style.display = 'none';
+            expend_input.style.display = 'flex';
+            trans_input.style.display = 'none';
+
+            document.querySelector('#costMoney').onkeyup = function() {
+                var costMoney = document.querySelector('#costMoney').value;
+                if (costMoney === "") {
+                    document.querySelector('#submitRecord').disabled = true;
+                    document.getElementById("costMoney_message").innerHTML = "Please enter cost money.";
+                }
+                else {
+                    document.querySelector('#submitRecord').disabled = false; 
+                    document.getElementById("costMoney_message").innerHTML = "";
+                }
+            }
+        }
+        else if (transType === "Transfer"){
+            income_input.style.display = 'none';
+            expend_input.style.display = 'none';
+            trans_input.style.display = 'flex';
+
+            document.querySelector('#transAmount').onkeyup = function() {
+                var costMoney = document.querySelector('#transAmount').value;
+                if (costMoney === "") {
+                    document.querySelector('#submitRecord').disabled = true;
+                    document.getElementById("transAmount_message").innerHTML = "Please enter transfer money.";
+                }
+                else {
+                    document.querySelector('#submitRecord').disabled = false; 
+                    document.getElementById("transAmount_message").innerHTML = "";
+                }
+            }
+        }
+        else {
+            income_input.style.display = 'none'; 
+            expend_input.style.display = 'none';
+            trans_input.style.display = 'none';
+        }
+    }
+
+    // Disabling the button after once click 
+    function disableButton(btn) {
+        document.getElementById('submitRecord').disabled = true;
+    }
+
+
+</script>

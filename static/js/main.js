@@ -49,9 +49,14 @@ $('#signUpForm').submit(function (event) {
     const form = {
         email: $('#signUpEmail').val(),
         password: $('#signUpPassword').val(),
+        confirmPassword: $('#confirmPassword').val()
     };
     console.log('[註冊]', form);
-    firebase
+    if (form.password !== form.confirmPassword) {
+        alert("密碼輸入不相同")
+    }
+    else {
+        firebase
         .auth()
         .createUserWithEmailAndPassword(form.email, form.password)
         .then(res => {
@@ -62,6 +67,8 @@ $('#signUpForm').submit(function (event) {
             console.log('[err]');
             alert(err.message);
         })
+    }
+    
 
 });
 

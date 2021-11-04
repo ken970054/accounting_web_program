@@ -1,0 +1,31 @@
+<!-- Modal for accont_manage.html account deposit edit -->
+<div class="modal fade" id="AccountDepositEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="AccountDepositDataForm" class="modal-content" method="POST" onsubmit="return disableAccountDepositButton(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title" id="headerText"></h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="AccountDeposit" class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body" id="account_deposit_group">
+                        <input type="number" class="form-control" min="1" id="depositMoney" onkeyup="accountManage_enableDepositSubmit()" required>
+                        <small id="depositMoney_message" class="form-text text-muted"></small>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="accountManage_depositModify" type="submit" class="btn btn-primary" disabled>Modify</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+

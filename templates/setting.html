@@ -1,0 +1,58 @@
+{% extends 'shared/layout.html' %}
+{% block body %}
+
+{% if auth_state.is_login %}
+<section style="padding: 3.5rem 0">
+    <div class="container">
+        <h1 style="text-align: center">Category Setting</h1>
+        <h3 style="color:Gray; font-style: italic"> </h3>
+    </div> 
+    <div class="container">
+        <div class="card border-secondary mb-3" id="accountSetting">
+            <div class="card-header bg-transparent border-secondary" style="font-size: 1.3em; font-weight:bold; ">
+                Accounts/Assets
+            </div>
+            <div class="card-body text-success">
+                {% for account in Account%}
+                <span class="badge rounded-pill bg-secondary" style="font-size: 1em;">{{ account }}</span>
+                {% endfor %}
+            </div>
+            <div class="card-footer bg-transparent border-secondary" style="text-align: center;">
+                <button id="editAccountButton" class="btn btn-primary" type="button" data-toggle="modal" data-target="#settingAccountEditModal">Edit</button>
+            </div>
+        </div>
+
+        <div class="card border-secondary mb-3" id="incomeItemSetting">
+            <div class="card-header bg-transparent border-secondary" style="font-size: 1.3em; font-weight:bold; ">
+                Income Items
+            </div>
+            <div class="card-body text-success">
+                {% for income in incomeItem %}
+                <span class="badge rounded-pill bg-success" style="font-size: 1em;">{{ income }}</span>
+                {% endfor %}
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-dark" style="text-align: center">
+                <button id="editIncomeButton" class="btn btn-primary" type="button" data-toggle="modal" data-target="#settingIncomeEditModal">Edit</button>
+            </div>
+        </div>
+
+        <div class="card border-secondary mb-3" id="expenseItemSetting">
+            <div class="card-header bg-transparent border-secondary" style="font-size: 1.3em; font-weight:bold; ">
+                Expense Items
+            </div>
+            <div class="card-body text-success">
+                {% for expend in expendItem %}
+                <span class="badge rounded-pill bg-warning text-dark" style="font-size: 1em;">{{ expend }}</span>
+                {% endfor %}
+            </div>
+            <div class="card-footer bg-transparent border-secondary" style="text-align: center;">
+                <button id="editExpenseButton" class="btn btn-primary" type="button" data-toggle="modal" data-target="#settingExpenseEditModal">Edit</button>
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,160 @@
+<!-- Modal for setting.html account edit -->
+<div class="modal fade" id="settingAccountEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="settingAccountDataForm" class="modal-content" method="POST" onsubmit="return disableModifyButton(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title" id="headerText"></h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="currentAccount" class="card">
+                    <div class="card-header">
+                        Current Account (Click to delete)
+                    </div>
+                    <div class="card-body" id="account_button_group">
+                        {% for account in Account %}
+                        <button type="button" class="btn btn-outline-secondary" style="margin-top: 5px; margin-left: 5px" value="{{ account }}">{{ account }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div id="deleteAccount" class="card mt-3">
+                    <div class="card-header">
+                        Delete Account (Click to undo)
+                    </div>
+                    <div class="card-body" id="delete_account_button_group"> 
+                    </div>
+                </div>
+                <div id="addAccount" class="card mt-3">
+                    <div class="card-header">
+                        Add Account (Click to cancel)
+                    </div>
+                    <div class="card-body" id="add_account_button_group">
+                    </div>
+                </div>
+                <div id="enterAccount" class="form-group col-md-5 mt-3">
+                    <label for="enterAoccunt">Enter your new account</label>
+                    <div style="display: flex">
+                        <input type="text" class="form-control" id="enterAccount_input">
+                        <button type="button" class="btn btn-success" style="margin-left: 5px">Add</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="account_modifySetting" type="submit" class="btn btn-primary"  disabled>Modify</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<!-- Modal for setting.html income items edit -->
+<div class="modal fade" id="settingIncomeEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="settingIncomeDataForm" class="modal-content" method="POST" onsubmit="return disableModifyButton(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title" id="headerText"></h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="currentIncomeItem" class="card">
+                    <div class="card-header">
+                        Current Income Item (Click to delete)
+                    </div>
+                    <div class="card-body" id="income_button_group">
+                        {% for income in incomeItem %}
+                        <button type="button" class="btn btn-outline-secondary" style="margin-top: 5px;" value="{{ income }}">{{ income }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div id="deleteIncomeItem" class="card mt-3">
+                    <div class="card-header">
+                        Delete Income Item (Click to undo)
+                    </div>
+                    <div class="card-body" id="delete_income_button_group"> 
+                    </div>
+                </div>
+                <div id="addIncomeItem" class="card mt-3">
+                    <div class="card-header">
+                        Add Income Item (Click to cancel)
+                    </div>
+                    <div class="card-body" id="add_income_button_group">
+                    </div>
+                </div>
+                <div id="enterIncomeItem" class="form-group col-md-5 mt-3">
+                    <label for="addIncomeItem">Enter your new income item</label>
+                    <div style="display: flex">
+                        <input type="text" class="form-control" id="enterIncomeItem_input">
+                        <button type="button" class="btn btn-success" style="margin-left: 5px">Add</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="income_modifySetting" type="submit" class="btn btn-primary"  disabled>Modify</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+<!-- Modal for setting.html expense items edit -->
+<div class="modal fade" id="settingExpenseEditModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="settingExpenseDataForm" class="modal-content" method="POST" onsubmit="return disableModifyButton(this)" novalidate >
+            <div class="modal-header">
+                <h5 class="modal-title" id="headerText"></h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="currentExpenseItem" class="card">
+                    <div class="card-header">
+                        Current Income Item (Click to delete)
+                    </div>
+                    <div class="card-body" id="expense_button_group">
+                        {% for expense in expendItem %}
+                        <button type="button" class="btn btn-outline-secondary" style="margin-top: 5px;" value="{{ expense }}">{{ expense }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div id="deleteExpenseItem" class="card mt-3">
+                    <div class="card-header">
+                        Delete Income Item (Click to undo)
+                    </div>
+                    <div class="card-body" id="delete_expense_button_group"> 
+                    </div>
+                </div>
+                <div id="addExpenseItem" class="card mt-3">
+                    <div class="card-header">
+                        Add Income Item (Click to cancel)
+                    </div>
+                    <div class="card-body" id="add_expense_button_group">
+                    </div>
+                </div>
+                <div id="enterExpenseItem" class="form-group col-md-5 mt-3">
+                    <label for="addExpenseItem">Enter your new income item</label>
+                    <div style="display: flex">
+                        <input type="text" class="form-control" id="enterExpenseItem_input">
+                        <button type="button" class="btn btn-success" style="margin-left: 5px">Add</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="expense_modifySetting" type="submit" class="btn btn-primary"  disabled>Modify</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
