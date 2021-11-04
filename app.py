@@ -97,6 +97,7 @@ month_list = ["January", "February", "March", "April", "May", "June", "July", "A
 
 @app.route('/', methods=['GET', 'POST'])
 def index_page():
+    user_email = ""
     try:
         # get user email and use for database naming
         session_cookie = request.cookies.get(cookie_name)
