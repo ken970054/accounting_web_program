@@ -76,22 +76,22 @@ def check_login():
     # 把auth_state傳遞到各個模板內
     return dict(auth_state=auth_state)
 
-#@app.before_request
-#def guard():
-#    auth_state = check_login()['auth_state']
+@app.before_request
+def guard():
+    auth_state = check_login()['auth_state']
     # 指向使用者所導入的路由函數名稱
-#    endpoint = request.endpoint
-#    is_admin = auth_state['is_admin']
+    endpoint = request.endpoint
+    is_admin = auth_state['is_admin']
     # 受管理者權限保護的頁面
-#    admin_route_list = [
-#        'create_product_page',
-#        'edit_product_page'
-#    ]
+    admin_route_list = [
+        'create_product_page',
+        'edit_product_page'
+    ]
     # 如果造訪的頁面是
     # 管理者權限保護頁面，而且此人並非管理者
-#    if endpoint in admin_route_list and not is_admin:
+    if endpoint in admin_route_list and not is_admin:
         # 強制回首頁
-#        return redirect('/')
+        return redirect('/')
 
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
