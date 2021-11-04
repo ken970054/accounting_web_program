@@ -144,143 +144,147 @@ def index_page():
             return render_template('index.html', incomeItem=incomeItem, expendItem=expendItem, Account=Account, month_list=month_list, \
                                     income_today_list=income_today_list, expense_today_list=expense_today_list, transfer_today_list=transfer_today_list, \
                                     income_yesterday_list=income_yesterday_list, expense_yesterday_list=expense_yesterday_list, transfer_yesterday_list=transfer_yesterday_list )
+        
+        # 取得Add item的post data
+        if request.method == "POST" and "transactionType" in request.get_json() and "editButton" not in request.get_json():
+            historyRecord(year_now, month_now, month_list, user_email)
+            # 取得newItem_modal的輸入資料，並且將對應資料分別存到不同的data list中(額外利用python datatime加上時間紀錄)
+            transType = request.get_json()['transactionType'] 
+            
+            # 利用transType & 輸入資料時的年/月/日作為資料庫的路徑分配
+            if transType == income_var:
+                # 呼叫recordTrace函式，判斷提交內容是當天的第幾筆資料
+                record_count = recordTrace(record_date, record_time, transType, user_email)
+
+                print(f"item name check: {request.get_json()['incomeItem']}")
+                income_quick_record = {
+                    'transType': transType,
+                    'month': request.get_json()['month'],
+                    'incomeItem': request.get_json()['incomeItem'],
+                    'money': request.get_json()['amountOfMoney'],
+                    'incomeAccount' : request.get_json()['incomeAccount'],
+                    'incomeNote': request.get_json()['incomeNote'],
+                    'recordDate': record_date,
+                    'recordTime': record_time,
+                    'recordCount': record_count
+                }
+                # 將資料寫入對應的document路徑，並將當天不同筆的數量資訊標示在document name做區隔
+                #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
+                doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
+                doc_ref.set(income_quick_record)
+
+            elif transType == expense_var:
+                record_count = recordTrace(record_date, record_time, transType, user_email)
+
+                expense_quick_record = {
+                    'transType': transType,
+                    'month': request.get_json()['month'],
+                    'expendItem': request.get_json()['expendItem'],
+                    'money': request.get_json()['amountOfMoney'],
+                    'expendAccount' : request.get_json()['expendAccount'],
+                    'expendNote': request.get_json()['expendNote'],
+                    'recordDate': record_date,
+                    'recordTime': record_time,
+                    'recordCount': record_count
+                }
+
+                #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
+                doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
+                doc_ref.set(expense_quick_record)
+                
+            elif transType == transfer_var:
+                record_count = recordTrace(record_date, record_time, transType, user_email)
+
+                transfer_quick_record = {
+                    'transType': transType,
+                    'month': request.get_json()['month'],
+                    'withdrawAccount': request.get_json()['withdrawAccount'],
+                    'transAmount': request.get_json()['transAmount'],
+                    'depositAccount': request.get_json()['depositAccount'],
+                    'transNote': request.get_json()['transNote'],
+                    'recordDate': record_date,
+                    'recordTime': record_time,
+                    'recordCount': record_count
+                }
+
+                #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
+                doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
+                doc_ref.set(transfer_quick_record)
+
+            return redirect("/")
+        
+        # 取得edit的post data
+        if request.method == "POST" and "transactionType" in request.get_json() and "editButton" in request.get_json():
+            transType = request.get_json()['transactionType'] 
+            editCount = request.get_json()['recordCount']
+            editDate = request.get_json()['recordDate']
+            editTime = request.get_json()['recordTime']
+            editDate_split = editDate.split(".")
+
+            if transType == income_var:
+                update_income_record = {
+                    'month': request.get_json()['month'],
+                    'incomeItem': request.get_json()['incomeItem'],
+                    'money': request.get_json()['amountOfMoney'],
+                    'incomeAccount' : request.get_json()['incomeAccount'],
+                    'incomeNote': request.get_json()['incomeNote']
+                }
+                #doc_ref = db.collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
+                doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
+                doc_ref.set(update_income_record, merge=True) # update data by set()
+
+            elif transType == expense_var:
+                update_expend_record = {
+                    'month': request.get_json()['month'],
+                    'expendItem': request.get_json()['expendItem'],
+                    'money': request.get_json()['amountOfMoney'],
+                    'expendAccount' : request.get_json()['expendAccount'],
+                    'expendNote': request.get_json()['expendNote']
+                }
+                #doc_ref = db.collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
+                doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
+                doc_ref.set(update_expend_record, merge=True)
+            
+            elif transType == transfer_var:
+                #editCount = request.get_json()['recordCount']
+                update_transfer_record = {
+                    'month': request.get_json()['month'],
+                    'withdrawAccount': request.get_json()['withdrawAccount'],
+                    'transAmount': request.get_json()['transAmount'],
+                    'depositAccount': request.get_json()['depositAccount'],
+                    'transNote': request.get_json()['transNote']
+                }
+                #doc_ref = db.collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
+                doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
+                doc_ref.set(update_transfer_record, merge=True)
+
+            return redirect("/")
+
+        # 取得delete的post data
+        if request.method == "POST" and "deleteButton" in request.get_json(): 
+            deleteType = request.get_json()['transType']
+            deleteCount = request.get_json()['recordCount']
+            deleteDate = request.get_json()['recordDate']
+            #deleteTime = request.get_json()['recordTime']
+            
+            deleteDate_split = deleteDate.split(".")    
+        
+            # find corresponding document and delete it
+            #doc_ref = db.collection(deleteType).document("YY" + deleteDate_split[0]).collection("MM" + deleteDate_split[1]).document("DD" + deleteDate_split[2] + "_" + str(deleteCount))
+            doc_ref = db.collection(user_email).document("Record").collection(deleteType).document("YY" + deleteDate_split[0]).collection("MM" + deleteDate_split[1]).document("DD" + deleteDate_split[2] + "_" + str(deleteCount))
+            doc_ref.delete() 
+            #print(delete_item.to_dict())
+            
+            return redirect("/")
+
+
     except:
         print("[User not login]")
         return render_template('index.html')
 
 
     
-    # 取得Add item的post data
-    if request.method == "POST" and "transactionType" in request.get_json() and "editButton" not in request.get_json():
-        historyRecord(year_now, month_now, month_list, user_email)
-        # 取得newItem_modal的輸入資料，並且將對應資料分別存到不同的data list中(額外利用python datatime加上時間紀錄)
-        transType = request.get_json()['transactionType'] 
-        
-        # 利用transType & 輸入資料時的年/月/日作為資料庫的路徑分配
-        if transType == income_var:
-            # 呼叫recordTrace函式，判斷提交內容是當天的第幾筆資料
-            record_count = recordTrace(record_date, record_time, transType, user_email)
 
-            print(f"item name check: {request.get_json()['incomeItem']}")
-            income_quick_record = {
-                'transType': transType,
-                'month': request.get_json()['month'],
-                'incomeItem': request.get_json()['incomeItem'],
-                'money': request.get_json()['amountOfMoney'],
-                'incomeAccount' : request.get_json()['incomeAccount'],
-                'incomeNote': request.get_json()['incomeNote'],
-                'recordDate': record_date,
-                'recordTime': record_time,
-                'recordCount': record_count
-            }
-            # 將資料寫入對應的document路徑，並將當天不同筆的數量資訊標示在document name做區隔
-            #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
-            doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
-            doc_ref.set(income_quick_record)
-
-        elif transType == expense_var:
-            record_count = recordTrace(record_date, record_time, transType, user_email)
-
-            expense_quick_record = {
-                'transType': transType,
-                'month': request.get_json()['month'],
-                'expendItem': request.get_json()['expendItem'],
-                'money': request.get_json()['amountOfMoney'],
-                'expendAccount' : request.get_json()['expendAccount'],
-                'expendNote': request.get_json()['expendNote'],
-                'recordDate': record_date,
-                'recordTime': record_time,
-                'recordCount': record_count
-            }
-
-            #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
-            doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
-            doc_ref.set(expense_quick_record)
-            
-        elif transType == transfer_var:
-            record_count = recordTrace(record_date, record_time, transType, user_email)
-
-            transfer_quick_record = {
-                'transType': transType,
-                'month': request.get_json()['month'],
-                'withdrawAccount': request.get_json()['withdrawAccount'],
-                'transAmount': request.get_json()['transAmount'],
-                'depositAccount': request.get_json()['depositAccount'],
-                'transNote': request.get_json()['transNote'],
-                'recordDate': record_date,
-                'recordTime': record_time,
-                'recordCount': record_count
-            }
-
-            #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
-            doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
-            doc_ref.set(transfer_quick_record)
-
-        return redirect("/")
-    
-    # 取得edit的post data
-    if request.method == "POST" and "transactionType" in request.get_json() and "editButton" in request.get_json():
-        transType = request.get_json()['transactionType'] 
-        editCount = request.get_json()['recordCount']
-        editDate = request.get_json()['recordDate']
-        editTime = request.get_json()['recordTime']
-        editDate_split = editDate.split(".")
-
-        if transType == income_var:
-            update_income_record = {
-                'month': request.get_json()['month'],
-                'incomeItem': request.get_json()['incomeItem'],
-                'money': request.get_json()['amountOfMoney'],
-                'incomeAccount' : request.get_json()['incomeAccount'],
-                'incomeNote': request.get_json()['incomeNote']
-            }
-            #doc_ref = db.collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
-            doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
-            doc_ref.set(update_income_record, merge=True) # update data by set()
-
-        elif transType == expense_var:
-            update_expend_record = {
-                'month': request.get_json()['month'],
-                'expendItem': request.get_json()['expendItem'],
-                'money': request.get_json()['amountOfMoney'],
-                'expendAccount' : request.get_json()['expendAccount'],
-                'expendNote': request.get_json()['expendNote']
-            }
-            #doc_ref = db.collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
-            doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
-            doc_ref.set(update_expend_record, merge=True)
-        
-        elif transType == transfer_var:
-            #editCount = request.get_json()['recordCount']
-            update_transfer_record = {
-                'month': request.get_json()['month'],
-                'withdrawAccount': request.get_json()['withdrawAccount'],
-                'transAmount': request.get_json()['transAmount'],
-                'depositAccount': request.get_json()['depositAccount'],
-                'transNote': request.get_json()['transNote']
-            }
-            #doc_ref = db.collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
-            doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
-            doc_ref.set(update_transfer_record, merge=True)
-
-        return redirect("/")
-
-    # 取得delete的post data
-    if request.method == "POST" and "deleteButton" in request.get_json(): 
-        deleteType = request.get_json()['transType']
-        deleteCount = request.get_json()['recordCount']
-        deleteDate = request.get_json()['recordDate']
-        #deleteTime = request.get_json()['recordTime']
-        
-        deleteDate_split = deleteDate.split(".")    
-    
-        # find corresponding document and delete it
-        #doc_ref = db.collection(deleteType).document("YY" + deleteDate_split[0]).collection("MM" + deleteDate_split[1]).document("DD" + deleteDate_split[2] + "_" + str(deleteCount))
-        doc_ref = db.collection(user_email).document("Record").collection(deleteType).document("YY" + deleteDate_split[0]).collection("MM" + deleteDate_split[1]).document("DD" + deleteDate_split[2] + "_" + str(deleteCount))
-        doc_ref.delete() 
-        #print(delete_item.to_dict())
-        
-        return redirect("/")
 
 @app.route('/account/book', methods=['GET', 'POST'])
 def account_book():
