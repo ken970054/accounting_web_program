@@ -92,6 +92,8 @@ def guard():
     if endpoint in admin_route_list and not is_admin:
         # 強制回首頁
         return redirect('/')
+        get_income_detail
+
 
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -211,7 +213,7 @@ def index_page():
                 doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                 doc_ref.set(transfer_quick_record)
 
-            return redirect("/")
+            return redirect(url_for("/"))
         
         # 取得edit的post data
         if request.method == "POST" and "transactionType" in request.get_json() and "editButton" in request.get_json():
