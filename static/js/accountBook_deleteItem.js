@@ -26,7 +26,7 @@ $(document).ready(function() {
                 recordTime: datetimeArr[1]
             };
             
-            const path = '/account/book';
+            const path = '/account_book';
             axios.post(path, form, axiosConfig)
                 .then(res => {
                     console.log('[完成delete_item_datetime傳遞]', form);

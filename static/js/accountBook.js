@@ -227,7 +227,7 @@ $('#record_form').submit(function (event) {
     }
     console.log(form);
 
-    const path = '/account/book';
+    const path = '/account_book';
     //post to Flask
     axios.post(path, form, axiosConfig)
         .then(res => {

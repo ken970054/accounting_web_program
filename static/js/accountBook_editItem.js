@@ -140,7 +140,7 @@ $('#editDataForm_book').submit(function (event) {
             recordDate: datetimeArr_edit[0],
             recordTime: datetimeArr_edit[1]
         };
-        const path = '/account/book';
+        const path = '/account_book';
         axios.post(path, form, axiosConfig)
             .then(res => {
                 console.log('[完成form傳遞]', form);
@@ -163,7 +163,7 @@ $('#editDataForm_book').submit(function (event) {
             recordDate: datetimeArr_edit[0],
             recordTime: datetimeArr_edit[1]
         };
-        const path = '/account/book';
+        const path = '/account_book';
         axios.post(path, form, axiosConfig)
             .then(res => {
                 console.log('[完成form傳遞]', form);
@@ -187,7 +187,7 @@ $('#editDataForm_book').submit(function (event) {
             recordDate: datetimeArr_edit[0],
             recordTime: datetimeArr_edit[1]
         };
-        const path = '/account/book';
+        const path = '/account_book';
         axios.post(path, form, axiosConfig)
             .then(res => {
                 console.log('[完成form傳遞]', form);
