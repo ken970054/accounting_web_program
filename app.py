@@ -592,7 +592,7 @@ def account_setting():
         add_list = request.get_json()['add_list']
 
         modify_list(form_type, delete_list, add_list, year_now, user_email)
-        return redirect(url_for("/account/setting"))
+        return redirect(url_for("account_setting"))
     
 
 @app.route('/api/login', methods=['POST'])
