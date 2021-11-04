@@ -72,7 +72,7 @@ def check_login():
         
     except:
         # 未登入
-        print('[用戶未登入]')
+        print('[User not login]')
     # 把auth_state傳遞到各個模板內
     return dict(auth_state=auth_state)
 
@@ -97,12 +97,15 @@ month_list = ["January", "February", "March", "April", "May", "June", "July", "A
 
 @app.route('/', methods=['GET', 'POST'])
 def index_page():
-    # get user email and use for database naming
-    session_cookie = request.cookies.get(cookie_name)
-    #print("[session_cookie]", session_cookie)
-    user_info = auth.verify_session_cookie(session_cookie, check_revoked=True)
-    user_email = user_info['email']
-    user_email = user_email.split("@")[0]
+    try:
+        # get user email and use for database naming
+        session_cookie = request.cookies.get(cookie_name)
+        #print("[session_cookie]", session_cookie)
+        user_info = auth.verify_session_cookie(session_cookie, check_revoked=True)
+        user_email = user_info['email']
+        user_email = user_email.split("@")[0]
+    except:
+        print("[User not login]")
 
     # now use temp data to show on index.html
     record_now = datetime.datetime.now()
