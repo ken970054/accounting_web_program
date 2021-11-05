@@ -182,7 +182,7 @@
             if (year !== "Year") {
                 //sent data to account_book through "get"
                 $.ajax({
-                    url: "/account/book",
+                    url: "/account_book",
                     type: "get",
                     //Can only pass string to Flask
                     data: {selected_data: year_month},
@@ -255,10 +255,10 @@
                         <td align="right"></td>
                         <td align="right">{{ expense_month.expendNote }}</td>
                         <td align="right" style="display:none">{{ expense_month.recordDate }} {{ expense_month.recordTime }}</td>
-                        <td>
+                        <td align="right">
                             <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
                         </td>
-                        <td>
+                        <td align="right">
                             <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                         </td>
                         <td style="display:none">{{ expense_month.recordCount }}</td>
@@ -278,9 +278,9 @@
                         <td>
                             <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
                         </td>
-                        <td>
+                        <td align="right">
                             <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
-                        </td>
+                        </td align="right">
                         <td style="display:none">{{ income_month.recordCount }}</td>
                     </tr>
                     {% endfor %}
@@ -295,12 +295,12 @@
                         <td align="right">{{ transfer_month.depositAccount }}</td>
                         <td align="right">{{ transfer_month.transNote }}</td>
                         <td align="right" style="display:none">{{ transfer_month.recordDate }} {{ transfer_month.recordTime }}</td>
-                        <td>
+                        <td align="right">
                             <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
                         </td>
-                        <td>
+                        <td align="right">
                             <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
-                        </td>
+                        </td align="right">
                         <td style="display:none">{{ transfer_month.recordCount }}</td>
                     </tr>
                     {% endfor %}

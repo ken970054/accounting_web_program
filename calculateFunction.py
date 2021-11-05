@@ -44,7 +44,8 @@ def get_expense_detail(expense_list, selected_year, user_email):
 
 
 def calculateTableContent(selected_account_name, originalDeposit, selected_year, Account, user_email):
-    
+    # If there is no record yet, does that mattre to this function?
+
     ## calculate total income in each account for account balance and gross income table ##
     income_ref = db.collection(user_email).document("Record").collection("Income").document("YY" + selected_year).collections()
     total_income_dict = {}

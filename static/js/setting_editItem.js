@@ -204,7 +204,7 @@ $('#settingAccountDataForm, #settingIncomeDataForm, #settingExpenseDataForm').su
         add_list: dict_add
     };
 
-    const path = '/account/setting';
+    const path = '/account_setting';
     axios.post(path, form, axiosConfig)
         .then(res => {
             console.log('[完成form傳遞]', form);

@@ -15,8 +15,8 @@
             <summary>Set up your financial depositor categories and your types of consumption</summary>
             <ul>
                 <li>Go to <span style="background-color: CornSilk">Setting</span></li>
-                <li>Edit your own accounts </li>
-                <li>Edit your own income and expense items</li>
+                <li>Edit your own accounts (avoid deleting any account if you start to take records!)</li>
+                <li>Edit your own income and expense items (avoid deleting any account if you start to take records!)</li>
             </ul>
         </details>   
         <details class="details-example">
@@ -68,14 +68,14 @@
                     <td align="right">{{ expense_today.month }}</td>
                     <td align="right">{{ expense_today.expendItem }}</td>
                     <td align="right">{{ expense_today.money | int | digitComma }}</td>
-                    <td align="right">{{ expense_today.Account }}</td>
+                    <td align="right">{{ expense_today.expendAccount }}</td>
                     <td align="right"></td>
                     <td align="right">{{ expense_today.expendNote }}</td>
                     <td align="right">{{ expense_today.recordDate }} {{ expense_today.recordTime }}</td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
                     </td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -91,10 +91,10 @@
                     <td align="right">{{ income_today.incomeAccount }}</td>
                     <td align="right">{{ income_today.incomeNote }}</td>
                     <td align="right">{{ income_today.recordDate }} {{ income_today.recordTime }}</td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
                     </td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -110,10 +110,10 @@
                     <td align="right">{{ transfer_today.depositAccount }}</td>
                     <td align="right">{{ transfer_today.transNote }}</td>
                     <td align="right">{{ transfer_today.recordDate }} {{ transfer_today.recordTime }}</td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
                     </td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -150,10 +150,10 @@
                     <td align="right"></td>
                     <td align="right">{{ expense_yesterday.expendNote }}</td>
                     <td align="right">{{ expense_yesterday.recordDate }} {{ expense_yesterday.recordTime }}</td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
                     </td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -169,10 +169,10 @@
                     <td align="right">{{ income_yesterday.incomeAccount }}</td>
                     <td align="right">{{ income_yesterday.incomeNote }}</td>
                     <td align="right">{{ income_yesterday.recordDate }} {{ income_yesterday.recordTime }}</td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
                     </td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -188,10 +188,10 @@
                     <td align="right">{{ transfer_yesterday.depositAccount }}</td>
                     <td align="right">{{ transfer_yesterday.transNote }}</td>
                     <td align="right">{{ transfer_yesterday.recordDate }} {{ transfer_yesterday.recordTime }}</td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal"><i class="bi bi-pencil-square"></i></button>
                     </td>
-                    <td>
+                    <td align="right">
                         <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -209,8 +209,8 @@
             <summary>Set up your financial depositor categories and your types of consumption</summary>
             <ul>
                 <li>Go to <span style="background-color: CornSilk">Setting</span></li>
-                <li>Edit your own accounts </li>
-                <li>Edit your own income and expense items</li>
+                <li>Edit your own accounts (avoid deleting any account if you start to take records!)</li>
+                <li>Edit your own income and expense items (avoid deleting any account if you start to take records!)</li>
             </ul>
         </details>   
         <details class="details-example">

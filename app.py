@@ -157,7 +157,7 @@ def index_page():
                 # 呼叫recordTrace函式，判斷提交內容是當天的第幾筆資料
                 record_count = recordTrace(record_date, record_time, transType, user_email)
 
-                print(f"item name check: {request.get_json()['incomeItem']}")
+                #print(f"item name check: {request.get_json()['incomeItem']}")
                 income_quick_record = {
                     'transType': transType,
                     'month': request.get_json()['month'],
@@ -445,7 +445,7 @@ def account_book():
                     doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                     doc_ref.set(transfer_quick_record)
 
-        return redirect(url_for("/account_book"))
+        return redirect(url_for("account_book"))
     
     # get data from edit accountBook record
     if request.method == "POST" and "editButton_book" in request.get_json():
@@ -492,7 +492,7 @@ def account_book():
             doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
             doc_ref.set(update_transfer_record, merge=True)
 
-        return redirect(url_for("/account_book"))
+        return redirect(url_for("account_book"))
 
     # get data from delete accountBook record
     if request.method == "POST" and "deleteButton_book" in request.get_json():
@@ -509,10 +509,10 @@ def account_book():
         doc_ref.delete() 
         #print(delete_item.to_dict())
         
-        return redirect(url_for("/account_book"))
+        return redirect(url_for("account_book"))
 
 
-@app.route('/account/manage', methods=['GET', 'POST'])
+@app.route('/account_manage', methods=['GET', 'POST'])
 def account_manage():
     # get user email and use for database naming
     session_cookie = request.cookies.get(cookie_name)
@@ -565,9 +565,9 @@ def account_manage():
         selected_account_name = request.get_json()['account_name']
         calculateTableContent(selected_account_name, originalDeposit, selected_year, Account, user_email)
 
-        return redirect(url_for("/account/manage"))
+        return redirect(url_for("account_manage"))
 
-@app.route('/account/setting', methods=['GET', 'POST'])
+@app.route('/account_setting', methods=['GET', 'POST'])
 def account_setting():
     # get user email and use for database naming
     session_cookie = request.cookies.get(cookie_name)

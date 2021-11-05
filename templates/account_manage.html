@@ -15,7 +15,7 @@
             if (year !== "Year") {
                 //sent data to account_manage through "get"
                 $.ajax({
-                    url: "/account/manage",
+                    url: "/account_manage",
                     type: "get",
                     //Can only pass string to Flask
                     data: {selected_data: year},

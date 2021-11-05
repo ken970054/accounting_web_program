@@ -21,7 +21,7 @@ $('#AccountDepositDataForm').submit(function (event) {
         selected_year: selected_year,
         account_name: account_name[1]
     };
-    const path = '/account/manage';
+    const path = '/account_manage';
     axios.post(path, form, axiosConfig)
         .then(res => {
             console.log('[完成form傳遞]', form);
