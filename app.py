@@ -34,9 +34,11 @@ app.config['SECRET_KEY'] = 'abc12345678'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 cookie_name = 'flask_cookie'
 
-SERVER_NAME = os.environ.get('SERVER_NAME')
+
+## How to set server name to url_for?
+#SERVER_NAME = os.environ.get('SERVER_NAME')
 #BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-app.config['SERVER_NAME'] = SERVER_NAME
+#app.config['SERVER_NAME'] = SERVER_NAME
 
 
 @app.context_processor
@@ -449,8 +451,8 @@ def account_book():
                     #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                     doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                     doc_ref.set(transfer_quick_record)
-        return redirect(url_for("account_book"), _external=True)
-        #return redirect("https://accounting-web-program.herokuapp.com/account_book")
+        #return redirect(url_for("account_book"))
+        return redirect("https://accounting-web-program.herokuapp.com/account_book")
     
     # get data from edit accountBook record
     if request.method == "POST" and "editButton_book" in request.get_json():
@@ -497,7 +499,8 @@ def account_book():
             doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
             doc_ref.set(update_transfer_record, merge=True)
 
-        return redirect(url_for("account_book"))
+        #return redirect(url_for("account_book"))
+        return redirect("https://accounting-web-program.herokuapp.com/account_book")
 
     # get data from delete accountBook record
     if request.method == "POST" and "deleteButton_book" in request.get_json():
@@ -514,8 +517,8 @@ def account_book():
         doc_ref.delete() 
         #print(delete_item.to_dict())
         
-        return redirect(url_for("/account_book"))
-
+        #return redirect(url_for("/account_book"))
+        return redirect("https://accounting-web-program.herokuapp.com/account_book")
 
 @app.route('/account_manage', methods=['GET', 'POST'])
 def account_manage():
@@ -570,7 +573,8 @@ def account_manage():
         selected_account_name = request.get_json()['account_name']
         calculateTableContent(selected_account_name, originalDeposit, selected_year, Account, user_email)
 
-        return redirect(url_for("account_manage"))
+        #return redirect(url_for("account_manage"))
+        return redirect("https://accounting-web-program.herokuapp.com/account_manage")
 
 @app.route('/account_setting', methods=['GET', 'POST'])
 def account_setting():
@@ -596,7 +600,9 @@ def account_setting():
         add_list = request.get_json()['add_list']
 
         modify_list(form_type, delete_list, add_list, year_now, user_email)
-        return redirect(url_for("account_setting"))
+        
+        #return redirect(url_for("account_setting"))
+        return redirect("https://accounting-web-program.herokuapp.com/account_setting")
     
 
 @app.route('/api/login', methods=['POST'])
