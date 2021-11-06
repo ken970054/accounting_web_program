@@ -213,7 +213,7 @@ def index_page():
                 doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                 doc_ref.set(transfer_quick_record)
 
-            return redirect(url_for("/"))
+            return redirect(url_for("index_page"))
         
         # 取得edit的post data
         if request.method == "POST" and "transactionType" in request.get_json() and "editButton" in request.get_json():
@@ -260,7 +260,7 @@ def index_page():
                 doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + editDate_split[0]).collection("MM" + editDate_split[1]).document("DD" + editDate_split[2] + "_" + str(editCount))
                 doc_ref.set(update_transfer_record, merge=True)
 
-            return redirect(url_for("/"))
+            return redirect(url_for("index_page"))
 
         # 取得delete的post data
         if request.method == "POST" and "deleteButton" in request.get_json(): 
@@ -277,7 +277,7 @@ def index_page():
             doc_ref.delete() 
             #print(delete_item.to_dict())
             
-            return redirect(url_for("/"))
+            return redirect(url_for("index_page"))
 
 
     except:
@@ -360,6 +360,7 @@ def account_book():
     # 取得record form的post data
     if request.method == "POST" and "transactionType_book_1" in request.get_json() and "editButton_book" not in request.get_json():
         historyRecord(year_now, month_now, month_list, user_email)
+        print("url check")
         # collect all record separate by id_num
         for id_num in range(1, 6):
             transType_string = 'transactionType_book_' + str(id_num)
