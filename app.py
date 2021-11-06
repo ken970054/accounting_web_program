@@ -14,7 +14,7 @@ import time
 import datetime
 
 # 引用flask相關資源
-from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, abort
+from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, abort, flask
 # 引用各種表單類別
 # 引用自行建立的functions
 from recordFunctions import historyRecord, recordTrace, oneDayRecord, oneMonRecord
@@ -28,6 +28,7 @@ csrf.init_app(app)
 # Custom filter
 app.jinja_env.filters["digitComma"] = digitComma
 
+flask.request.environ['wsgi.url_scheme'] = 'https'
 # 設定應用程式的SECRET_KEY
 app.config['SECRET_KEY'] = 'abc12345678'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
