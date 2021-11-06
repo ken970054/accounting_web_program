@@ -14,7 +14,7 @@ import time
 import datetime
 
 # 引用flask相關資源
-from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, abort, flask
+from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify, abort
 # 引用各種表單類別
 # 引用自行建立的functions
 from recordFunctions import historyRecord, recordTrace, oneDayRecord, oneMonRecord
