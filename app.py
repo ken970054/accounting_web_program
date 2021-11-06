@@ -28,7 +28,6 @@ csrf.init_app(app)
 # Custom filter
 app.jinja_env.filters["digitComma"] = digitComma
 
-flask.request.environ['wsgi.url_scheme'] = 'https'
 
 # 設定應用程式的SECRET_KEY
 app.config['SECRET_KEY'] = 'abc12345678'
