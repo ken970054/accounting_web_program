@@ -446,8 +446,8 @@ def account_book():
                     #doc_ref = db.collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                     doc_ref = db.collection(user_email).document("Record").collection(transType).document("YY" + str(year_now)).collection("MM" + str(month_now)).document("DD" + str(day_now) + "_" + str(record_count))
                     doc_ref.set(transfer_quick_record)
-
-        return redirect("https://accounting-web-program.herokuapp.com/account_book")
+        return redirect(url_for("account_book"), _external=True)
+        #return redirect("https://accounting-web-program.herokuapp.com/account_book")
     
     # get data from edit accountBook record
     if request.method == "POST" and "editButton_book" in request.get_json():
