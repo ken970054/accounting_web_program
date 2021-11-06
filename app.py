@@ -34,7 +34,8 @@ app.config['SECRET_KEY'] = 'abc12345678'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 cookie_name = 'flask_cookie'
 
-
+SERVER_NAME = os.environ.get('SERVER_NAME')
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 @app.context_processor
 def check_login():
