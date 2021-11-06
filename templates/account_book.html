@@ -275,12 +275,12 @@
                         <td align="right">{{ income_month.incomeAccount }}</td>
                         <td align="right">{{ income_month.incomeNote }}</td>
                         <td align="right" style="display:none">{{ income_month.recordDate }} {{ income_month.recordTime }}</td>
-                        <td>
+                        <td align="right">
                             <button type="button" class="btn editButton" data-toggle="modal" data-target="#editItemModal_book"><i class="bi bi-pencil-square"></i></button>
                         </td>
                         <td align="right">
                             <button type="button" class="btn deleteButton"><i class="fa fa-trash"></i></button>
-                        </td align="right">
+                        </td>
                         <td style="display:none">{{ income_month.recordCount }}</td>
                     </tr>
                     {% endfor %}
