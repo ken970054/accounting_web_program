@@ -12,7 +12,7 @@ Open http://0.0.0.0:5000/ to view in your browser.
 
 ## Main pages
 #### Front-end
-**General layout for all the pages: layout.html, style.css**
+General layout for all the pages: layout.html, style.css
 1. `Home`
    - User login or sign up
    - Button for adding one new record and show records in two days from now
@@ -39,10 +39,12 @@ Open http://0.0.0.0:5000/ to view in your browser.
 
 #### Back-end
 * Main function: app.py
-  - Control all route in different pages
+  - Control all routes in different pages
   - Set up environment for Flask and Firebase
-* Function for `Home` page: recordFunctions.py
-
+  - Get data from Firebase and send to .html pages
+* Function for get records for html: recordFunctions.py
+* Function for setting categories: settingFunction.py 
+* Function for calculating the account balance and income, expense of items: calculateFunction.py
 
 #### Implement framework and tools
 * Flask, AJAX, jQuery

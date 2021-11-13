@@ -113,7 +113,7 @@ def index_page():
         user_email = user_info['email']
         user_email = user_email.split("@")[0]
 
-            # now use temp data to show on index.html
+        # now use temp data to show on index.html
         record_now = datetime.datetime.now()
         year_now = record_now.year
         month_now = record_now.month
