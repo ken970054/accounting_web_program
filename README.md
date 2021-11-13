@@ -1,8 +1,11 @@
 # CO$T $AVING
 Video Demo:  <URL HERE>
-An app to take your daily financial records.
+Website Link built on Heroku: https://accounting-web-program.herokuapp.com/
+(You can use account: test001@gmail.com, password: 123456 to login and check)
 
-* show some image?
+> An app to take your daily financial records.
+
+
 
 # Files Description
 In the project directory, you can run:
