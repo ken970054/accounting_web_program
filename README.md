@@ -3,7 +3,7 @@ Video Demo:  https://youtu.be/_gPpEOTnzLo
 
 Website Link built on Heroku: https://accounting-web-program.herokuapp.com/
 
-(You can use account: test03@gmail.com, password: 123456 to login and check)
+(You can use account: test03@gmail.com, password: 123456 to login and demo)
 
 > An app to take your daily financial records.
 
