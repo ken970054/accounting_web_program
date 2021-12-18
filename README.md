@@ -9,7 +9,7 @@ Website Link built on Heroku: https://accounting-web-program.herokuapp.com/
 
 
 
-# Files Description
+# File Description
 In the project directory, you can run:
 #### `python app.py`
 Run the app in the development mode.
